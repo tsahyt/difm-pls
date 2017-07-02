@@ -1,0 +1,8 @@
+flags: {}
+extra-package-dbs: []
+packages:
+- '.'
+extra-deps:
+- pipes-aeson-0.4.1.8
+- pipes-http-1.0.5
+resolver: lts-8.21

@@ -1,0 +1,21 @@
+name:                difm-pls
+version:             0.1.0.0
+synopsis:            Tool to download playlists for di.fm
+description:         See README.rst
+homepage:            https://github.com/githubuser/difm-pls#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Paul Ogris
+maintainer:          paul@tsahyt.com
+copyright:           2017 Paul Ogris
+category:            Web
+build-type:          Simple
+cabal-version:       >=1.10
+extra-source-files:  README.md
+
+executable difm-pls
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5, aeson, optparse-applicative, http-conduit, conduit, bytestring, http-types
+  ghc-options:         -Wall -O2

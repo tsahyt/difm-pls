@@ -98,7 +98,9 @@ run opts = do
 
     where fetch x = do
               liftIO $ putStr ("Fetching " ++ piName x ++ "... ")
-              res <- httpLBS . premiumReq (service opts) (listenKey opts) $ x
+              res <- case listenKey opts of
+                         Nothing -> httpLBS . fromString . piPlaylist $ x
+                         Just k  -> httpLBS . premiumReq (service opts) k $ x
               liftIO . putStrLn $ 
                   case statusCode . getResponseStatus $ res of
                       200 -> "OK!"
@@ -109,34 +111,42 @@ run opts = do
 data Service 
     = DigitallyImported
     | SkyFM
+    | RockRadio
+    | JazzRadio
     deriving (Show, Eq)
 
 serviceIndex :: Service -> String
 serviceIndex DigitallyImported = "http://listen.di.fm/public3"
 serviceIndex SkyFM = "http://listen.sky.fm/public3"
+serviceIndex RockRadio = "http://listen.rockradio.com/public3"
+serviceIndex JazzRadio = "http://listen.jazzradio.com/public3"
 
 serviceUrl :: Service -> String
 serviceUrl DigitallyImported = "http://listen.di.fm/premium_high/%s.pls?%s"
 serviceUrl SkyFM = "http://listen.radiotunes.com/premium_high/%s.pls?%s"
+serviceUrl RockRadio = "http://listen.rockradio.com/premium_high/%s.pls?%s"
+serviceUrl JazzRadio = "http://listen.jazzradio.com/premium_high/%s.pls?%s"
 
 serviceOpt :: ReadM Service
 serviceOpt = maybeReader $ \case
     "di.fm"          -> Just DigitallyImported
     "sky.fm"         -> Just SkyFM
     "radiotunes.com" -> Just SkyFM
+    "rockradio.com"  -> Just RockRadio
+    "jazzradio.com"  -> Just JazzRadio
     _                -> Nothing
              
 data Options = Options
-    { listenKey :: String
+    { listenKey :: Maybe String
     , service   :: Service 
     , outFile   :: FilePath }
     deriving (Show, Eq)
 
 options :: Parser Options
 options = Options 
-    <$> strOption
+    <$> optional (strOption
             ( short 'k'
-           <> help "Listen key" )
+           <> help "Listen key" ))
     <*> option serviceOpt
             ( short 's'
            <> help "Service (di.fm, sky.fm, radiotunes.com) - Default: di.fm"

@@ -6,7 +6,7 @@
 module Main where
 
 import Control.Monad.IO.Class
-import Data.Aeson
+import Data.Aeson hiding (Options)
 import Data.Aeson.Types (fieldLabelModifier, defaultOptions)
 import Data.Char (toLower)
 import Data.Conduit
@@ -113,6 +113,7 @@ data Service
     | SkyFM
     | RockRadio
     | JazzRadio
+    | ClassicalRadio
     deriving (Show, Eq)
 
 serviceIndex :: Service -> String
@@ -120,21 +121,24 @@ serviceIndex DigitallyImported = "http://listen.di.fm/public3"
 serviceIndex SkyFM = "http://listen.sky.fm/public3"
 serviceIndex RockRadio = "http://listen.rockradio.com/public3"
 serviceIndex JazzRadio = "http://listen.jazzradio.com/public3"
+serviceIndex ClassicalRadio = "http://listen.classicalradio.com/public3"
 
 serviceUrl :: Service -> String
 serviceUrl DigitallyImported = "http://listen.di.fm/premium_high/%s.pls?%s"
 serviceUrl SkyFM = "http://listen.radiotunes.com/premium_high/%s.pls?%s"
 serviceUrl RockRadio = "http://listen.rockradio.com/premium_high/%s.pls?%s"
 serviceUrl JazzRadio = "http://listen.jazzradio.com/premium_high/%s.pls?%s"
+serviceUrl ClassicalRadio = "http://listen.classicalradio.com/premium_high/%s.pls?%s"
 
 serviceOpt :: ReadM Service
 serviceOpt = maybeReader $ \case
-    "di.fm"          -> Just DigitallyImported
-    "sky.fm"         -> Just SkyFM
-    "radiotunes.com" -> Just SkyFM
-    "rockradio.com"  -> Just RockRadio
-    "jazzradio.com"  -> Just JazzRadio
-    _                -> Nothing
+    "di.fm"              -> Just DigitallyImported
+    "sky.fm"             -> Just SkyFM
+    "radiotunes.com"     -> Just SkyFM
+    "rockradio.com"      -> Just RockRadio
+    "jazzradio.com"      -> Just JazzRadio
+    "classicalradio.com" -> Just ClassicalRadio
+    _                    -> Nothing
              
 data Options = Options
     { listenKey :: Maybe String

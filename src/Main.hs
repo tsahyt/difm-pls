@@ -11,7 +11,6 @@ import Data.Aeson.Types (fieldLabelModifier, defaultOptions)
 import Data.Char (toLower)
 import Data.Conduit
 import Data.List (intersperse)
-import Data.Monoid
 import Data.String
 import GHC.Generics
 import Network.HTTP.Simple

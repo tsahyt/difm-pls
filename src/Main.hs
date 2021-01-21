@@ -113,6 +113,7 @@ data Service
     | RockRadio
     | JazzRadio
     | ClassicalRadio
+    | ZenRadio
     deriving (Show, Eq)
 
 serviceIndex :: Service -> String
@@ -121,6 +122,7 @@ serviceIndex SkyFM = "http://listen.sky.fm/public3"
 serviceIndex RockRadio = "http://listen.rockradio.com/public3"
 serviceIndex JazzRadio = "http://listen.jazzradio.com/public3"
 serviceIndex ClassicalRadio = "http://listen.classicalradio.com/public3"
+serviceIndex ZenRadio = "http://listen.zenradio.com/public3"
 
 serviceUrl :: Service -> String
 serviceUrl DigitallyImported = "http://listen.di.fm/premium_high/%s.pls?%s"
@@ -128,6 +130,7 @@ serviceUrl SkyFM = "http://listen.radiotunes.com/premium_high/%s.pls?%s"
 serviceUrl RockRadio = "http://listen.rockradio.com/premium_high/%s.pls?%s"
 serviceUrl JazzRadio = "http://listen.jazzradio.com/premium_high/%s.pls?%s"
 serviceUrl ClassicalRadio = "http://listen.classicalradio.com/premium_high/%s.pls?%s"
+serviceUrl ZenRadio = "http://listen.zenradio.com/premium_high/%s.pls?%s"
 
 serviceOpt :: ReadM Service
 serviceOpt = maybeReader $ \case
@@ -137,6 +140,7 @@ serviceOpt = maybeReader $ \case
     "rockradio.com"      -> Just RockRadio
     "jazzradio.com"      -> Just JazzRadio
     "classicalradio.com" -> Just ClassicalRadio
+    "zenradio.com"       -> Just ZenRadio
     _                    -> Nothing
              
 data Options = Options
@@ -152,7 +156,7 @@ options = Options
            <> help "Listen key" ))
     <*> option serviceOpt
             ( short 's'
-           <> help "Service (di.fm, sky.fm, radiotunes.com) - Default: di.fm"
+           <> help "Service - Default: di.fm"
            <> value DigitallyImported )
     <*> strOption
             ( short 'o'
